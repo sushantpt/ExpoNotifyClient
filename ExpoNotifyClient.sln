@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{875A789E-19DB-490C-8D47-D1BFD7ADEDCB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{1A335730-7FB4-4EB3-86B6-768C239388FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpoNotifyClient", "src\ExpoNotifyClient\ExpoNotifyClient.csproj", "{EE06EC64-37DA-496A-A213-27B761B9B7AC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "tests\UnitTests\UnitTests.csproj", "{01331A52-89C0-4F62-9A23-BC40F64A4DF8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo-Console", "src\Demo-Console\Demo-Console.csproj", "{6FB60E5C-682C-42ED-8B02-AE3B2BB0197C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EE06EC64-37DA-496A-A213-27B761B9B7AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE06EC64-37DA-496A-A213-27B761B9B7AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE06EC64-37DA-496A-A213-27B761B9B7AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE06EC64-37DA-496A-A213-27B761B9B7AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01331A52-89C0-4F62-9A23-BC40F64A4DF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01331A52-89C0-4F62-9A23-BC40F64A4DF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01331A52-89C0-4F62-9A23-BC40F64A4DF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01331A52-89C0-4F62-9A23-BC40F64A4DF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FB60E5C-682C-42ED-8B02-AE3B2BB0197C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FB60E5C-682C-42ED-8B02-AE3B2BB0197C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FB60E5C-682C-42ED-8B02-AE3B2BB0197C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FB60E5C-682C-42ED-8B02-AE3B2BB0197C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EE06EC64-37DA-496A-A213-27B761B9B7AC} = {875A789E-19DB-490C-8D47-D1BFD7ADEDCB}
+		{01331A52-89C0-4F62-9A23-BC40F64A4DF8} = {1A335730-7FB4-4EB3-86B6-768C239388FD}
+		{6FB60E5C-682C-42ED-8B02-AE3B2BB0197C} = {875A789E-19DB-490C-8D47-D1BFD7ADEDCB}
+	EndGlobalSection
+EndGlobal

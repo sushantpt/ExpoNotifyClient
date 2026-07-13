@@ -1,0 +1,31 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstats
+*.sln.sqlite
+*.DotSettings.user
+*.nupkg
+*.snupkg
+
+## VS Code
+.vscode/
+
+## Rider
+.idea/
+*.sln.iml
+
+## VS
+.vs/
+*.csproj.user
+
+## Build
+packages/
+*.log
+*.tmp
+
+## OS
+.DS_Store
+Thumbs.db
