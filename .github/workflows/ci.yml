@@ -2,36 +2,104 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [ master ]
   pull_request:
-    branches: [main]
+    branches: [ master ]
+  workflow_dispatch:
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        dotnet-version: ['6.0.x', '7.0.x', '8.0.x', '9.0.x']
+      fail-fast: false
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Setup .NET
+      - name: Setup .NET ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 10.0.x
+          dotnet-version: ${{ matrix.dotnet-version }}
 
-      - name: Restore
+      - name: Restore dependencies
         run: dotnet restore
 
       - name: Build
         run: dotnet build --no-restore -c Release -warnaserror
 
-      - name: Test
-        run: dotnet test --no-build -c Release
+      - name: Run tests
+        run: dotnet test --no-build -c Release --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./TestResults
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-${{ matrix.dotnet-version }}
+          path: ./TestResults
+
+  pack:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore -c Release
 
       - name: Pack
-        run: dotnet pack --no-build -c Release -o ./artifacts
+        run: dotnet pack --no-build -c Release --include-symbols -p:SymbolPackageFormat=snupkg -o ./artifacts
 
       - name: Upload NuGet artifacts
         uses: actions/upload-artifact@v4
         with:
           name: nuget-packages
           path: ./artifacts/*.nupkg
+
+      - name: Upload symbols
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-symbols
+          path: ./artifacts/*.snupkg
+
+  publish:
+    needs: pack
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    
+    steps:
+      - name: Download NuGet artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: nuget-packages
+          path: ./artifacts
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Push to NuGet (Trusted Publishing)
+        run: |
+          dotnet nuget push ./artifacts/*.nupkg \
+            --source https://api.nuget.org/v3/index.json \
+            --skip-duplicate
+        env:
+          NUGET_TRUSTED_SIGNING: true
