@@ -1,0 +1,37 @@
+name: Release to NuGet
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build -c Release
+
+      - name: Pack
+        run: dotnet pack src/ExpoNotifyClient/ExpoNotifyClient.csproj -c Release --include-symbols -p:SymbolPackageFormat=snupkg -o ./artifacts
+
+      - name: Push to NuGet (Trusted Publishing)
+        run: |
+          dotnet nuget push ./artifacts/*.nupkg \
+            --source https://api.nuget.org/v3/index.json \
+            --skip-duplicate
+        env:
+          NUGET_TRUSTED_SIGNING: true
